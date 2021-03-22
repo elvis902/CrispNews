@@ -15,6 +15,9 @@ import retrofit2.Response
 class MainActivity : AppCompatActivity() {
     lateinit var adapter : RecyclerAdapter
     var articles = mutableListOf<Articles>()
+    val TAG = "MainActivity"
+    var pageNum = 1
+     var totalResults:Int = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -32,6 +35,13 @@ class MainActivity : AppCompatActivity() {
             override fun onItemChanged(position: Int) {
                 var colour = ColorPicker.getColors()
                 main_container.setBackgroundColor(Color.parseColor(colour))
+//                Log.d(TAG, "Current News idx is ${manager.getFirstVisibleItemPosition()}")
+//                Log.d(TAG, "Total Item Count is ${manager.itemCount}")
+                if(totalResults > manager.itemCount && manager.getFirstVisibleItemPosition() > manager.itemCount-5)
+                {
+                    pageNum++;
+                    getNews()
+                }
             }
 
         })
@@ -42,7 +52,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun getNews() {
-        val news = NewsServices.newsInstance.getHeadlines("in", 1)
+        val news = NewsServices.newsInstance.getHeadlines("in", pageNum)
         news.enqueue(object:Callback<News>{
             override fun onFailure(call: Call<News>, t: Throwable) {
                 Log.d("CEEZYCODE", "Error in Fetcing news")
@@ -52,6 +62,7 @@ class MainActivity : AppCompatActivity() {
                 var news: News? = response.body()
                 if(news != null)
                 {
+                    totalResults = news.totalResults.toInt()
                    articles.addAll(news.articles)
                     adapter.notifyDataSetChanged()
 

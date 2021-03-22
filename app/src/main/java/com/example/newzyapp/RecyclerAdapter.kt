@@ -1,6 +1,7 @@
 package com.example.newzyapp
 
 import android.content.Context
+import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -29,6 +30,9 @@ class RecyclerAdapter(val context: Context, private val list:List<Articles>) : R
         Glide.with(context).load(imageUrl).into(holder.newsImage)
         holder.itemView.setOnClickListener {
             Toast.makeText(context, list[position].title, Toast.LENGTH_SHORT).show()
+            val intent = Intent(context, DetailActivity::class.java)
+            intent.putExtra("URL", list[position].url)
+            context.startActivity(intent)
         }
     }
 
