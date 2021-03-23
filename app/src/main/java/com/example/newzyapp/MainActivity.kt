@@ -5,6 +5,10 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.android.gms.ads.AdListener
+import com.google.android.gms.ads.AdRequest
+import com.google.android.gms.ads.InterstitialAd
+import com.google.android.gms.ads.MobileAds
 import com.littlemango.stacklayoutmanager.StackLayout
 import com.littlemango.stacklayoutmanager.StackLayoutManager
 import kotlinx.android.synthetic.main.activity_main.*
@@ -18,12 +22,28 @@ class MainActivity : AppCompatActivity() {
     val TAG = "MainActivity"
     var pageNum = 1
      var totalResults:Int = 0
+    private lateinit var mInterstitialAd: InterstitialAd
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        adapter = RecyclerAdapter(this, articles)
+        MobileAds.initialize(this)
+        mInterstitialAd = InterstitialAd(this)
+        mInterstitialAd.adUnitId = "ca-app-pub-3940256099942544/1033173712"
+        mInterstitialAd.loadAd(AdRequest.Builder().build())
+        mInterstitialAd.adListener = object: AdListener() {
+            override fun onAdClosed() {
+                super.onAdClosed()
+                mInterstitialAd.loadAd(AdRequest.Builder().build())
+            }
+        }
+
+
+
+
+            adapter = RecyclerAdapter(this, articles)
         rv_main.adapter = adapter
         //rv_main.layoutManager = LinearLayoutManager(this)
 
@@ -40,7 +60,14 @@ class MainActivity : AppCompatActivity() {
                 if(totalResults > manager.itemCount && manager.getFirstVisibleItemPosition() > manager.itemCount-5)
                 {
                     pageNum++;
-                    getNews()
+                    getNews() //Repeated calls are made till we fetch all total news.
+                }
+                if(position%5 == 0)
+                {
+                    //For showing Add
+                    if (mInterstitialAd.isLoaded) {
+                        mInterstitialAd.show()
+                    }
                 }
             }
 

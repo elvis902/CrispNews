@@ -56,4 +56,7 @@ dependencies {
     //Dependency for stack layout manager
     implementation 'com.littlemango:stacklayoutmanager:1.0.5'
 
+    implementation 'com.google.android.gms:play-services-ads:19.8.0'
+
+
 }

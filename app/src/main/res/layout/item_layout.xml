@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_margin="10dp"
+    android:layout_margin="35dp"
     android:elevation="8dp"
     android:padding="12dp">
 
@@ -13,12 +13,12 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:padding="10dp">
+        android:padding="15dp">
 
         <ImageView
             android:id="@+id/news_image"
             android:layout_width="match_parent"
-            android:layout_height="150dp"
+            android:layout_height="175dp"
             android:scaleType="centerCrop"
             tools:srcCompat="@tools:sample/avatars" />
 
@@ -38,7 +38,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
-            android:maxLines="2"
+            android:maxLines="3"
             android:text="TextView" />
 
     </LinearLayout>
